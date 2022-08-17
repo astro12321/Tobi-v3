@@ -1,30 +1,32 @@
 from scapy.all import raw
+from threading import Thread
 
 from Packet import *
 from Kamui import *
+from GUI import *
 
 
-class Tobi:
-    def __init__(self):
-        self.totalPackets = 0
-
-    #Construct the packet
-    def check(self, pktBytes: bytes) -> Packet:
-        self.totalPackets += 1
-        return Packet(self.totalPackets, pktBytes)
-
-
-if __name__ == "__main__":
-    tobi = Tobi()
-    kamui = Kamui()
-
+def RunApp(kamui, model, controller):
     while True:
         buffer = kamui.recv()
 
-        pkt = tobi.check(buffer)
+        model.addPkt(buffer) #Adding the packet to the queue
+        controller.notifyItemAdded() #This method act a bit like a user, so we need to interact with the controller (tell him it needs to display a new packet)
 
-        print("-------------------------------------------")
-        pkt.show()
-        print("-------------------------------------------")
+        #When the user will be able to drop packets, there will need to be a condition here to verify if the queue is not empty
+        kamui.send(raw(model.getPkt()))
 
-        kamui.send(raw(pkt))
+
+if __name__ == "__main__":
+    model = Model() #Prepare the queue for packets
+    kamui = Kamui() #Prepare TUN interface
+
+    view = View(700, 600)
+    controller = Controller(model, view)
+    view.setController(controller) #The View needs the controller to modify the model when the user click on something
+
+    #Run the TUN interface
+    thr = Thread(target=RunApp, args=(kamui, model, controller, )).start()
+
+    view.window.mainloop()
+    thr.join() #If the code gets here, it's because the program needs to be stopped
