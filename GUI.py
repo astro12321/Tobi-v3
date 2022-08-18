@@ -13,15 +13,15 @@ class Model:
         pkt = Packet(len(self.queue) + 1, buffer)
         self.queue.append(pkt)
 
-    def getPkt(self) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
-        return self.queue[-1]
+    def getPkt(self, ind=-1) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
+        return self.queue[ind]
 
 
 #Receive data and modify the View
 class Controller:
-    def __init__(self, model, view):
+    def __init__(self, model):
         self.model = model
-        self.view = view
+        self.view = None
 
     def notifyItemAdded(self):
         pkt = self.model.getPkt()
@@ -30,10 +30,18 @@ class Controller:
         self.view.packetsListBox.insert(pkt.index, itemToAdd)
         self.view.packetsListBox.yview(END)
 
+    def getPktFullDesc(self, index):
+        return self.model.getPkt(index).show(dump=True)
+
+    def setView(self, view):
+        self.view = view
+
 
 #GUI
 class View(Frame):
-    def __init__(self, width, height):
+    def __init__(self, controller, width, height):
+        self.controller = controller
+
         self.window = Tk()
         self.window.title("Tobi")
 
@@ -45,6 +53,7 @@ class View(Frame):
         frame.pack()
 
         self.packetsListBox = Listbox(frame, width=width, height=height, font=("Helvetica", 12))
+        self.packetsListBox.bind('<Double-Button>', self.openPacketPopUp) #Double clicking on item in listbox call func
         self.packetsListBox.pack(side="left", fill="y")
 
         scrollbar = Scrollbar(frame, orient="vertical")
@@ -55,5 +64,11 @@ class View(Frame):
 
         self.window.protocol("WM_DELETE_WINDOW", sys.exit)
 
-    def setController(self, controller):
-        self.controller = controller
+    def openPacketPopUp(self, event):
+        pktNumber = event.widget.curselection()[0]
+
+        win = Tk()
+        win.title(f"Packet {pktNumber + 1}")
+
+        l = Label(win, text=self.controller.getPktFullDesc(pktNumber))
+        l.grid(row=0, column=0)

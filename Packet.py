@@ -5,6 +5,7 @@ class Packet(IP):
         super().__init__(pktBytes)
 
         self.index = index
+        self.raw = raw(self)
 
     def __getProtos(self):
         counter = 0

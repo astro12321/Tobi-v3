@@ -14,16 +14,17 @@ def RunApp(kamui, model, controller):
         controller.notifyItemAdded() #This method act a bit like a user, so we need to interact with the controller (tell him it needs to display a new packet)
 
         #When the user will be able to drop packets, there will need to be a condition here to verify if the queue is not empty
-        kamui.send(raw(model.getPkt()))
+        kamui.send(model.getPkt().raw)
 
 
 if __name__ == "__main__":
     model = Model() #Prepare the queue for packets
     kamui = Kamui() #Prepare TUN interface
 
-    view = View(700, 600)
-    controller = Controller(model, view)
-    view.setController(controller) #The View needs the controller to modify the model when the user click on something
+    #view = View(700, 600)
+    controller = Controller(model)
+    view = View(controller, 700, 600)
+    controller.setView(view)
 
     #Run the TUN interface
     thr = Thread(target=RunApp, args=(kamui, model, controller, )).start()
