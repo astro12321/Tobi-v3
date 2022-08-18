@@ -18,7 +18,7 @@ class Packet(IP):
             counter += 1
             yield layer.name
 
-    def resume(self):
+    def resume(self) -> str:
         IPs = f"src: {self.src} dst: {self.dst} | "
         ports = ""
         protocols = "Protos: " + " ".join(x for x in self.__getProtos()) + " | "

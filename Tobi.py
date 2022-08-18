@@ -1,12 +1,18 @@
+import sys
+
 from scapy.all import raw
 from threading import Thread
+
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 from Packet import *
 from Kamui import *
 from GUI import *
 
 
-def RunApp(kamui, model, controller):
+def RunApp(kamui: Kamui, model: Model, controller: Controller):
     while True:
         buffer = kamui.recv()
 
@@ -21,13 +27,18 @@ if __name__ == "__main__":
     model = Model() #Prepare the queue for packets
     kamui = Kamui() #Prepare TUN interface
 
-    #view = View(700, 600)
-    controller = Controller(model)
-    view = View(controller, 700, 600)
+    controller = Controller(model) #Create Controller
+
+    #Prepare the View
+    app = QApplication(sys.argv)
+    mainWindow = QWidget()
+    view = View(controller)
+    view.setupUi(mainWindow)
+
     controller.setView(view)
 
     #Run the TUN interface
     thr = Thread(target=RunApp, args=(kamui, model, controller, )).start()
 
-    view.window.mainloop()
-    thr.join() #If the code gets here, it's because the program needs to be stopped
+    mainWindow.show()
+    app.exec_()
