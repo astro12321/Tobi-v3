@@ -59,10 +59,14 @@ class View(MainWindowUI):
     def setupUi(self, Dialog, width=700, height=600):
         super().setupUi(Dialog, width, height)
 
+        #Set model on list view
         self.packetsListViewModel = QtGui.QStandardItemModel()
         self.packetsListView.setModel(self.packetsListViewModel)
+
+        #Set function on button to open packet
         self.openPacketButton.clicked.connect(self.popUpPacket)
 
+    #Create the function to popup a window with the packet info
     def popUpPacket(self):
         if not self.controller.isPktQueueEmpty():
             pktIndex = self.packetsListView.currentIndex().row()
@@ -83,10 +87,11 @@ class PacketWindow(PacketWindowUI):
     def setupUi(self, Dialog):
         super().setupUi(Dialog)
 
-        #Modify text
+        #Modify packet text
         self.contentTextEdit.textCursor().insertText(self.pkt.show(dump=True))
 
     def retranslateUi(self, Dialog):
         super().retranslateUi(Dialog)
 
+        #Set the window title
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", f"Packet {self.pkt.index}", None))
