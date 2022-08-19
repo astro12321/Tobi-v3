@@ -1,22 +1,26 @@
-from tkinter import *
 from Packet import *
 from MainWindowUI import *
+from PacketWindowUI import *
 
 from PySide2 import QtGui
-from PacketWindowUI import *
+
+from multiprocessing import Queue
 
 
 #Receive packets and analyze them
 class Model:
-    def __init__(self):
-        self.queue = deque()
+    def __init__(self, queue):
+        #self.queue = Queue()
+        self.queue = queue
 
     def addPkt(self, buffer: bytes):
-        pkt = Packet(len(self.queue) + 1, buffer)
-        self.queue.append(pkt)
+        pkt = Packet(1, buffer) #len(self.queue) + 1
+        self.queue.put(buffer)
 
     def getPkt(self, ind=-1) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
-        return self.queue[ind]
+        #print("asddas")
+        #sys.exit(0)
+        return self.queue.get(ind)
 
 
 #Receive data and modify the View
@@ -24,9 +28,10 @@ class Controller:
     def __init__(self, model: Model):
         self.model = model
         self.view = None
+        
 
     def notifyItemAdded(self):
-        pkt = self.model.getPkt()
+        #pkt = self.model.getPkt()
 
         #If there's to much request, the program will slow drastically, this condition make sure everything runs smooth
         #BUT, having this condition crashes the program... So there would need to be a small sleep (which would only slow the interface, but not the traffic)
@@ -34,7 +39,7 @@ class Controller:
         #if self.view.packetsListViewModel.rowCount() > 5:
         #    self.view.packetsListViewModel.removeRow(0)
 
-        item = QtGui.QStandardItem(f"{pkt.index}. {pkt.resume()}")
+        item = QtGui.QStandardItem("sdaasd")
         self.view.packetsListViewModel.appendRow(item)
 
     def isPktQueueEmpty(self) -> bool:
@@ -43,7 +48,8 @@ class Controller:
         return True
 
     def getPkt(self, ind=-1) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
-        return self.model.getPkt(ind)
+        self.view.packetsListViewModel.appendRow(QtGui.QStandardItem("adsdsadd"))
+        #return self.model.getPkt(ind)
 
     def setView(self, view):
         self.view = view
