@@ -1,15 +1,16 @@
 from Packet import *
 
 
-class Filter(): #ip.src = 8.8.8.8
+class Filter():
     def __init__(self, filters):
         self.filtersStr = filters
 
         self.filtersDict = {"ip.src": "", "ip.dst": "", "port.src": "", "port.dst": ""}
 
         for filter in filters.split(' '):
-            filter = "".join(filters.split()) #Remove spaces
+            #filter = "".join(filters.split()) #Remove spaces
             filter = filter.split('=')
+
             key = filter[0]
             value = filter[1]
 
@@ -28,3 +29,14 @@ class Filter(): #ip.src = 8.8.8.8
 
     def toString(self) -> str:
         return self.filtersStr
+
+
+
+def isFilterValid(filters: str):
+    for filter in filters.split(' '):
+        #filter = "".join(filters.split()) #Remove spaces
+        filter = filter.split('=')
+
+        if len(filter) != 2: return False
+
+        return True

@@ -17,18 +17,21 @@ def RunApp(packetQueue, filterQueue):
     count = 0
 
     while True:
+        while not filterQueue.empty(): #Verify if the filters have been updated
+            value = filterQueue.get()
+
+            #If the item in the queue is an int, remove the filter at the index in the list, if not, add the filter
+            if isinstance(value, int):
+                filters.pop(value)
+            else:
+                filters.append(Filter(value))
+
         buffer = kamui.recv()
 
         count += 1
 
         #Analyze packets
-        pkt = Packet(buffer, count)
-
-        while not filterQueue.empty():
-            filter = Filter(filterQueue.get())
-            filters.append(filter)
-
-        allow = analyzePacket(filters, pkt)
+        allow = analyzePacket(filters, Packet(buffer, count))
 
         packetQueue.put([allow, buffer]) #The UI will refer to this queue to update, it contains the buffer and the packet status (allow or not)
 
