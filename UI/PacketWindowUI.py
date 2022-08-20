@@ -31,10 +31,8 @@ class PacketWindowUI(object):
 
         self.closeButton = QPushButton(self.verticalLayoutWidget)
         self.closeButton.setObjectName(u"closeButton")
-        self.closeButton.clicked.connect(self.window.close)
 
         self.verticalLayout.addWidget(self.closeButton)
-
 
         self.retranslateUi(Dialog)
 
