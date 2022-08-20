@@ -64,7 +64,7 @@ class MainWindowUI():
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.startCaptureButton.setText(QCoreApplication.translate("Dialog", u"START", None))
+        self.startCaptureButton.setText(QCoreApplication.translate("Dialog", u"STOP", None))
         self.openPacketButton.setText(QCoreApplication.translate("Dialog", u"Open Packet", None))
         self.removeFilterButton.setText(QCoreApplication.translate("Dialog", u"Remove Filter", None))
         self.addFilterButton.setText(QCoreApplication.translate("Dialog", u"Add filter", None))
