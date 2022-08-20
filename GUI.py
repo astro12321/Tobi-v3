@@ -1,26 +1,20 @@
 from Packet import *
-from MainWindowUI import *
-from PacketWindowUI import *
+from UI.MainWindowUI import *
+from UI.PacketWindowUI import *
 
 from PySide2 import QtGui
-
-from multiprocessing import Queue
 
 
 #Receive packets and analyze them
 class Model:
-    def __init__(self, queue):
-        #self.queue = Queue()
-        self.queue = queue
+    def __init__(self):
+        self.queue = list()
 
-    def addPkt(self, buffer: bytes):
-        pkt = Packet(1, buffer) #len(self.queue) + 1
-        self.queue.put(buffer)
+    def addPkt(self, pkt: Packet):
+        self.queue.append(pkt)
 
-    def getPkt(self, ind=-1) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
-        #print("asddas")
-        #sys.exit(0)
-        return self.queue.get(ind)
+    def getPkt(self, ind=-1) -> Packet:
+        return self.queue[ind]
 
 
 #Receive data and modify the View
@@ -28,28 +22,22 @@ class Controller:
     def __init__(self, model: Model):
         self.model = model
         self.view = None
-        
 
-    def notifyItemAdded(self):
-        #pkt = self.model.getPkt()
+    def addPkt(self, buffer: bytes):
+        pkt = Packet(buffer, len(self.model.queue) + 1)
 
-        #If there's to much request, the program will slow drastically, this condition make sure everything runs smooth
-        #BUT, having this condition crashes the program... So there would need to be a small sleep (which would only slow the interface, but not the traffic)
-        #but having that sleep also seems to slow the traffic, even if it's another thread... which is strange... might need to see multiprocessing instead of threading
-        #if self.view.packetsListViewModel.rowCount() > 5:
-        #    self.view.packetsListViewModel.removeRow(0)
-
-        item = QtGui.QStandardItem("sdaasd")
-        self.view.packetsListViewModel.appendRow(item)
+        #Modify model
+        self.model.addPkt(pkt)
+        #Modify view
+        self.view.addItemToPacketsListView(f"{pkt.index}. {pkt.resume()}")
 
     def isPktQueueEmpty(self) -> bool:
         if self.model.queue:
             return False
         return True
 
-    def getPkt(self, ind=-1) -> Packet: #The item in the queue cannot be pop(), because this function is called by 2 classes
-        self.view.packetsListViewModel.appendRow(QtGui.QStandardItem("adsdsadd"))
-        #return self.model.getPkt(ind)
+    def getPkt(self, ind=-1) -> Packet:
+        return self.model.getPkt(ind)
 
     def setView(self, view):
         self.view = view
@@ -76,11 +64,15 @@ class View(MainWindowUI):
     def popUpPacket(self):
         if not self.controller.isPktQueueEmpty():
             pktIndex = self.packetsListView.currentIndex().row()
-            pkt = self.controller.getPkt(pktIndex)
+            pkt = self.controller.getPkt(pktIndex) #Not sure if this call respect MVC...
             self.popUpwindow = QWidget()
             self.p = PacketWindow(self.popUpwindow, pkt) 
             self.p.setupUi(self.popUpwindow)
             self.popUpwindow.show()
+
+    def addItemToPacketsListView(self, desc: str):
+        item = QtGui.QStandardItem(desc)
+        self.packetsListViewModel.appendRow(item)
 
 
 class PacketWindow(PacketWindowUI):

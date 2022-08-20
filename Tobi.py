@@ -1,71 +1,45 @@
-import sys
-import time
+import sys, time
 
 from Packet import *
 from Kamui import *
 from GUI import *
 
-from PySide2 import QtGui
 from PySide2.QtCore import *
 
-from scapy.all import raw
-from multiprocessing import Process, Queue, Array
+from multiprocessing import Process, Queue
 from threading import Thread
 
 
-def RunApp(packetQueueIn, packetQueueOut):
+def RunApp(packetQueue):
     kamui = Kamui()
+    count = 0
 
     while True:
         buffer = kamui.recv()
 
-        packetQueueIn.put(buffer)
+        count += 1
 
-        if packetQueueOut:
-            kamui.send(packetQueueOut.get())
+        packetQueue.put(buffer) #The UI will refer to this queue to update
+
+        #Analyze packets HERE
+        pkt = Packet(buffer, count)
+
+        kamui.send(buffer)
 
 
-def updateUI(packetQueueForUI, view, model):
-    count = 0
-
+def updateUI(packetQueue, controller):
     while True:
-        if packetQueueForUI:
+        if packetQueue:
             time.sleep(0.05) #Slows down the UI to not make it crash (0.05s seems like the sweet spot)
-            count += 1
-
-
-            #buffer = packetQueueIn.get()
-            #packetQueueIn.put(buffer)
-
-
-            #model.addPkt(buffer) #This lags out the app (because of the sleep)
-
-
-            pkt = Packet(count, packetQueueForUI.get())
-            #pkt = Packet(count, packetQueueIn.get())
-            view.packetsListViewModel.appendRow(QtGui.QStandardItem(f"{pkt.index}. {pkt.resume()}"))
-
-
-
-def analyzePkt(packetQueueIn, packetQueueOut, packetQueueForUI):
-    while True:
-        if packetQueueIn:
-            buffer = packetQueueIn.get()
-
-            #Analayze packet
-            pkt = Packet(1, buffer)
-
-            packetQueueForUI.put(buffer)
-            packetQueueOut.put(buffer)
+            
+            buffer = packetQueue.get()
+            controller.addPkt(buffer)
 
 
 if __name__ == "__main__":
-    packetQueueIn = Queue() #The queue in which the packets are entering in the TUN interface
-    packetQueueOut = Queue() #The queue containing only the packets we want to use
-    packetQueueForUI = Queue() #The queue containing only the packets we want to show in the UI
+    packetQueue = Queue()
 
-    model = Model(packetQueueOut) #Prepare the queue for packets
-
+    model = Model() #Prepare the queue for packets
     controller = Controller(model) #Create Controller
 
     #Prepare the View
@@ -77,15 +51,11 @@ if __name__ == "__main__":
     controller.setView(view)
 
     #Run the TUN interface on its own process
-    Process(target=RunApp, args=(packetQueueIn, packetQueueOut, )).start()
-    Process(target=analyzePkt, args=(packetQueueIn, packetQueueOut, packetQueueForUI, )).start()
+    Process(target=RunApp, args=(packetQueue, )).start()
 
     mainWindow.show()
 
     #Open a thread to put items in the list view (using only a thread for this and not a process)
-    Thread(target=updateUI, args=(packetQueueForUI, view, model, )).start()
-
-
-    
+    Thread(target=updateUI, args=(packetQueue, controller, )).start()
 
     app.exec_()

@@ -1,7 +1,7 @@
 from scapy.all import *
 
 class Packet(IP):
-    def __init__(self, index: int, pktBytes: bytes):
+    def __init__(self, pktBytes: bytes, index: int = -1):
         super().__init__(pktBytes)
 
         self.index = index
