@@ -23,14 +23,47 @@ def RunApp(packetQueue):
 
         #Analyze packets HERE
         pkt = Packet(buffer, count)
+        filter = Filter("ip.src=8.8.8.8")
+        filters = [filter]
 
-        kamui.send(buffer)
+        allow = analyzePacket(filters, pkt)
+
+        if allow:
+            kamui.send(buffer)
+
+
+class Filter():
+    def __init__(self, filters):
+        self.filtersDict = {"ip.src": list(), "port": list()}
+
+        for filter in filters.split(' '):
+            filter = filter.split('=')
+            key = filter[0]
+            value = filter[1]
+
+            if key in self.filtersDict:
+                self.filtersDict[key].append(value)
+
+    def check(self, pkt: Packet) -> bool:
+        for k in self.filtersDict.keys():
+            if k == "ip.src": #There should be a check making sure the ip.src exists in the packet
+                for condition in self.filtersDict[k]:
+                    if pkt.src == condition:
+                        return False
+        return True
+
+
+def analyzePacket(filters: list, pkt: Packet) -> bool:
+    for filter in filters:
+        if not filter.check(pkt): #If the check doesn't pass
+            return False
+    return True
 
 
 def updateUI(packetQueue, controller):
     while True:
         if packetQueue:
-            time.sleep(0.05) #Slows down the UI to not make it crash (0.05s seems like the sweet spot)
+            time.sleep(0.1) #Slows down the UI to not make it crash
             
             buffer = packetQueue.get()
             controller.addPkt(buffer)

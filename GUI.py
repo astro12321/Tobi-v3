@@ -82,6 +82,7 @@ class View(MainWindowUI):
                 self.p.setupUi(self.popUpwindow)
                 self.popUpwindow.show()
 
+    #Toggle the packet capture (only in the UI)
     def toggleUpdateView(self):
         toggleState = self.controller.toggleUpdateView()
 
@@ -90,10 +91,12 @@ class View(MainWindowUI):
         elif not toggleState:
             self.startCaptureButton.setText("START")
 
-
     def addItemToPacketsListView(self, desc: str):
+        #if self.packetsListViewModel.rowCount() > 10: #Clear the listview if there's too much items
+        #    self.packetsListViewModel.clear()
         item = QtGui.QStandardItem(desc)
         self.packetsListViewModel.appendRow(item)
+        self.packetsListView.scrollToBottom()
 
 
 class PacketWindow(PacketWindowUI):

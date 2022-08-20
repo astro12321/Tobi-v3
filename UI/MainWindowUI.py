@@ -63,7 +63,7 @@ class MainWindowUI():
         QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
+        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Tobi", None))
         self.startCaptureButton.setText(QCoreApplication.translate("Dialog", u"STOP", None))
         self.openPacketButton.setText(QCoreApplication.translate("Dialog", u"Open Packet", None))
         self.removeFilterButton.setText(QCoreApplication.translate("Dialog", u"Remove Filter", None))
