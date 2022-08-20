@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainWindowpJopxP.ui'
+## Form generated from reading UI file 'mainWindowrUrjBj.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.5
 ##
@@ -17,53 +17,74 @@ class MainWindowUI(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(960, 693)
+        Dialog.resize(976, 682)
         self.gridLayout_2 = QGridLayout(Dialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.titleLabel = QLabel(Dialog)
-        self.titleLabel.setObjectName(u"titleLabel")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.gridLayout_4 = QGridLayout()
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.removeFilterButton = QPushButton(Dialog)
+        self.removeFilterButton.setObjectName(u"removeFilterButton")
 
-        self.gridLayout.addWidget(self.titleLabel, 3, 1, 1, 3, Qt.AlignHCenter)
-
-        self.startCaptureButton = QPushButton(Dialog)
-        self.startCaptureButton.setObjectName(u"startCaptureButton")
-
-        self.gridLayout.addWidget(self.startCaptureButton, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.removeFilterButton, 0, 1, 1, 1)
 
         self.addFilterButton = QPushButton(Dialog)
         self.addFilterButton.setObjectName(u"addFilterButton")
 
-        self.gridLayout.addWidget(self.addFilterButton, 1, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.addFilterButton, 0, 0, 1, 1)
 
-        self.packetsListView = QListView(Dialog)
-        self.packetsListView.setObjectName(u"packetsListView")
+        self.startCaptureButton = QPushButton(Dialog)
+        self.startCaptureButton.setObjectName(u"startCaptureButton")
 
-        self.gridLayout.addWidget(self.packetsListView, 4, 0, 1, 4)
-
-        self.filtersListView = QListView(Dialog)
-        self.filtersListView.setObjectName(u"filtersListView")
-
-        self.gridLayout.addWidget(self.filtersListView, 1, 3, 2, 1)
-
-        self.removeFilterButton = QPushButton(Dialog)
-        self.removeFilterButton.setObjectName(u"removeFilterButton")
-
-        self.gridLayout.addWidget(self.removeFilterButton, 1, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.startCaptureButton, 1, 0, 1, 1)
 
         self.openPacketButton = QPushButton(Dialog)
         self.openPacketButton.setObjectName(u"openPacketButton")
 
-        self.gridLayout.addWidget(self.openPacketButton, 2, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.openPacketButton, 1, 1, 1, 1)
+
+        self.filtersListView = QListView(Dialog)
+        self.filtersListView.setObjectName(u"filtersListView")
+
+        self.gridLayout_4.addWidget(self.filtersListView, 0, 2, 2, 1)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.gridLayout_4)
+
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.packetsListView = QListView(Dialog)
+        self.packetsListView.setObjectName(u"packetsListView")
+
+        self.gridLayout_3.addWidget(self.packetsListView, 0, 0, 1, 1)
 
 
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.verticalLayout.addLayout(self.gridLayout_3)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.hideBlockedPktcheckBox = QCheckBox(Dialog)
+        self.hideBlockedPktcheckBox.setObjectName(u"hideBlockedPktcheckBox")
+
+        self.horizontalLayout.addWidget(self.hideBlockedPktcheckBox)
+
+        self.UIprogressBar = QProgressBar(Dialog)
+        self.UIprogressBar.setObjectName(u"UIprogressBar")
+        self.UIprogressBar.setValue(24)
+
+        self.horizontalLayout.addWidget(self.UIprogressBar)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
+
+        self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.gridLayout, 0, 1, 1, 1)
 
 
         self.retranslateUi(Dialog)
@@ -73,10 +94,10 @@ class MainWindowUI(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.titleLabel.setText(QCoreApplication.translate("Dialog", u"Packet Capture", None))
-        self.startCaptureButton.setText(QCoreApplication.translate("Dialog", u"STOP", None))
-        self.addFilterButton.setText(QCoreApplication.translate("Dialog", u"Add filter", None))
         self.removeFilterButton.setText(QCoreApplication.translate("Dialog", u"Remove Filter", None))
+        self.addFilterButton.setText(QCoreApplication.translate("Dialog", u"Add filter", None))
+        self.startCaptureButton.setText(QCoreApplication.translate("Dialog", u"STOP", None))
         self.openPacketButton.setText(QCoreApplication.translate("Dialog", u"Open Packet", None))
+        self.hideBlockedPktcheckBox.setText(QCoreApplication.translate("Dialog", u"Hide blocked packets", None))
     # retranslateUi
 

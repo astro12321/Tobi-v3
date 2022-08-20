@@ -54,7 +54,7 @@ def updateUI(packetQueue, controller):
             pktSkeleton = packetQueue.get()
             pktAllow = pktSkeleton[0]
             buffer = pktSkeleton[1]
-            controller.addPkt(pktAllow, buffer)
+            controller.addPkt(pktAllow, buffer, packetQueue.qsize())
 
 
 if __name__ == "__main__":
