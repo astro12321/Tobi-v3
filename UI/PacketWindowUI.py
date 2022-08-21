@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'packetxXudnd.ui'
+## Form generated from reading UI file 'packetIxfSSh.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.5
 ##
@@ -17,22 +17,24 @@ class PacketWindowUI(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(400, 300)
-        self.verticalLayoutWidget = QWidget(Dialog)
-        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(9, 19, 381, 261))
-        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+        Dialog.resize(524, 449)
+        self.gridLayout = QGridLayout(Dialog)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.contentTextEdit = QPlainTextEdit(self.verticalLayoutWidget)
+        self.contentTextEdit = QPlainTextEdit(Dialog)
         self.contentTextEdit.setObjectName(u"contentTextEdit")
 
         self.verticalLayout.addWidget(self.contentTextEdit)
 
-        self.closeButton = QPushButton(self.verticalLayoutWidget)
+        self.closeButton = QPushButton(Dialog)
         self.closeButton.setObjectName(u"closeButton")
 
         self.verticalLayout.addWidget(self.closeButton)
+
+
+        self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
+
 
         self.retranslateUi(Dialog)
 
@@ -40,7 +42,7 @@ class PacketWindowUI(object):
     # setupUi
 
     def retranslateUi(self, Dialog):
+        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.closeButton.setText(QCoreApplication.translate("Dialog", u"Close", None))
     # retranslateUi
-
 

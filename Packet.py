@@ -23,6 +23,6 @@ class Packet(IP):
         protocols = "Protos: " + " ".join(x for x in self.__getProtos()) + " | "
 
         if (TCP or UDP) in self:
-            ports = f"srcPort: {self.sport} dstPost: {self.dport} | "
+            ports = f"srcPort: {self.sport} dstPort: {self.dport} | "
 
         return IPs + ports + protocols
